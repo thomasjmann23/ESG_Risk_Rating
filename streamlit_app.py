@@ -185,7 +185,7 @@ def train_model(X_train, y_train):
 def get_model_metrics(model, X_test, y_test):
     """Calculate model performance metrics"""
     y_pred = model.predict(X_test)
-    rmse = mean_squared_error(y_test, y_pred, squared=False)
+    rmse = np.sqrt(mean_squared_error(y_test, y_pred))  # Calculate RMSE manually
     r2 = r2_score(y_test, y_pred)
     return y_pred, rmse, r2
 
@@ -275,7 +275,7 @@ def calculate_proxy_variables_real(df):
     if renewable_cols and 'Active_Power_kW' in df.columns:
         renewable_gen = df[renewable_cols].sum(axis=1).mean()
         total_power = df['Active_Power_kW'].mean()
-        proxy_vars['renewable_generation'] = round((renewable_gen / total_power) * 80 if total_power > 0 else 0, 0)
+        proxy_vars['renewable_generation'] = round((renewable_gen / total_power) * 100 if total_power > 0 else 0, 0)
     else:
         proxy_vars['renewable_generation'] = 0
         
